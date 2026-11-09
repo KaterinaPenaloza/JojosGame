@@ -1,6 +1,5 @@
 from game.character import Character
 
-
 class Combat:
     def __init__(self, j1: Character, j2: Character):
         if j1.stand.speed >= j2.stand.speed:

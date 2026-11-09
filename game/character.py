@@ -1,6 +1,7 @@
 from enum import Enum
 from random import randint
-from game.stand import sticky_fingers, gold_experience, sex_pistols, aerosmith, purple_haze, moody_blues, spice_girl
+from game.stand import *
+
 
 class Team(Enum):
     BUCCIARATI = "Team Bucciarati"
@@ -13,6 +14,9 @@ class Character:
         self.stand = stand
         self.max_life = 100
         self._life = self.max_life
+
+    def __str__(self):
+        return f"{self.name} ({self.stand})"
 
     @property
     def life(self):
@@ -54,11 +58,21 @@ class Character:
         rival.take_damage(damage)
         return damage
 
-# Team Bucciarati
-bucciarati = Character("Bruno Bucciarati", Team.BUCCIARATI, sticky_fingers)
-giorno = Character("Giorno Giovanna", Team.BUCCIARATI, gold_experience)
-mista = Character("Guido Mista", Team.BUCCIARATI, sex_pistols)
-narancia = Character("Narancia Ghirga", Team.BUCCIARATI, aerosmith)
-fugo = Character("Pannacotta Fugo", Team.BUCCIARATI, purple_haze)
-abbacchio = Character("Leone Abbacchio", Team.BUCCIARATI, moody_blues)
-trish = Character("Trish Una", Team.BUCCIARATI, spice_girl)
+    @classmethod
+    def create_characters(cls):
+        return [
+            Character("Bruno Bucciarati", Team.BUCCIARATI, sticky_fingers),
+            Character("Giorno Giovanna", Team.BUCCIARATI, gold_experience),
+            Character("Guido Mista", Team.BUCCIARATI, sex_pistols),
+            Character("Narancia Ghirga", Team.BUCCIARATI, aerosmith),
+            Character("Pannacotta Fugo", Team.BUCCIARATI, purple_haze),
+            Character("Leone Abbacchio", Team.BUCCIARATI, moody_blues),
+            Character("Trish Una", Team.BUCCIARATI, spice_girl),
+            Character("Risotto Nero", Team.LA_SQUADRA, metallica),
+            Character("Formaggio", Team.LA_SQUADRA, little_feet),
+            Character("Illuso", Team.LA_SQUADRA, man_in_the_mirror),
+            Character("Prosciutto", Team.LA_SQUADRA, grateful_death),
+            Character("Pesci", Team.LA_SQUADRA, beach_boy),
+            Character("Melone", Team.LA_SQUADRA, baby_face),
+            Character("Ghiaccio", Team.LA_SQUADRA, white_album),
+        ]
