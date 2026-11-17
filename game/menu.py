@@ -1,6 +1,7 @@
+import random
+
 from game.character import Character, Team
 from game.combat import Combat
-from game.stand import sticky_fingers, gold_experience
 
 class Menu:
     def run(self):
@@ -38,28 +39,40 @@ class Menu:
 
         print(f"\nGanó {combat.winner()}")
 
-
     @staticmethod
     def choose_characters():
-        # Guardar los personajes en una lista
         characters = Character.create_characters()
         bucciarati_team = [c for c in characters if c.team == Team.BUCCIARATI]
         squadra = [c for c in characters if c.team == Team.LA_SQUADRA]
 
         # Elegir personaje
         print("Elija su personaje:")
-        for number, c in enumerate(bucciarati_team):
+        print(0, "random")
+        for number, c in enumerate(bucciarati_team, start=1):
             print(number, c)
-        op1 = int(input("Personaje: "))
-        p1 = bucciarati_team[op1]
+
+        try:
+            op1 = int(input("Personaje: "))
+            p1 = random.choice(bucciarati_team) if op1 == 0 else bucciarati_team[op1 - 1]
+        except (ValueError, IndexError):
+            print("Entrada inválida, asignando personaje aleatorio por defecto.")
+            p1 = random.choice(bucciarati_team)
+
         print(f"{p1.name} elegido \n")
 
+        # Elegir contrincante
         print("Elija su contrincante:")
-        for number, c in enumerate(squadra):
+        print(0, "random")
+        for number, c in enumerate(squadra, start=1):
             print(number, c)
-        op2 = int(input("Enemigo: "))
-        p2 = squadra[op2]
+
+        try:
+            op2 = int(input("Enemigo: "))
+            p2 = random.choice(squadra) if op2 == 0 else squadra[op2 - 1]
+        except (ValueError, IndexError):
+            print("Entrada inválida, asignando contrincante aleatorio por defecto.")
+            p2 = random.choice(squadra)
+
         print(f"{p2.name} elegido")
 
         return p1, p2
-
