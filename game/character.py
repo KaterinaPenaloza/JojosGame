@@ -11,6 +11,8 @@ class Team(Enum):
 @dataclass
 class AttackResult:
     base_damage: int
+    imprecise: bool
+    damage_after_precision: int
     reacted: bool
     damage_after_reaction: int
     final_damage: int
@@ -60,14 +62,21 @@ class Character:
 
     def attack(self, rival):
         base_damage = self.damage()
+        imprecise = self.is_imprecise()
+        after_precision = round(base_damage * 0.8) if imprecise else base_damage
         reacted = rival.defends()
-        after_reaction = round(base_damage * 0.7) if reacted else base_damage
+        after_reaction = round(after_precision * 0.7) if reacted else after_precision
         final_damage = max(1, after_reaction - rival.stand.durability)
         rival.take_damage(final_damage)
-        return AttackResult(base_damage, reacted, after_reaction, final_damage)
+        return AttackResult(base_damage, imprecise, after_precision,
+                            reacted, after_reaction, final_damage)
 
     def defends(self):
         chance = self.stand.speed * 10
+        return randint(1, 100) <= chance
+
+    def is_imprecise(self):
+        chance = (5 - self.stand.precision) * 10
         return randint(1, 100) <= chance
 
     @classmethod

@@ -37,6 +37,8 @@ class Menu:
             if action == "1":
                 attacker, defender, result = combat.execute_turn()
                 print(f"{attacker} ataca a {defender} y hace {result.base_damage} de daño")
+                if result.imprecise:
+                    print(f"El ataque de {attacker} es impreciso y el daño baja a {result.damage_after_precision}")
                 if result.reacted:
                     print(f"{defender} se defiende y el daño baja a {result.damage_after_reaction}")
                 absorbed = result.damage_after_reaction - result.final_damage
