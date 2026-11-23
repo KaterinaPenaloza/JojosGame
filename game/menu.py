@@ -26,12 +26,22 @@ class Menu:
         while not combat.game_over():
             print(f"\n{p1.name}: {p1.life} | {p2.name}: {p2.life}")
             print(f"Turno de {combat.attacker.name}")
-            print("1. Atacar")
-            print("2. Rendirse")
-            action = input("Acción: ")
+
+            # el enemigo siempre ataca
+            if combat.attacker is p2:
+                action = "1"
+            else:
+                print("1. Atacar")
+                print("2. Rendirse")
+                action = input("Acción: ")
             if action == "1":
-                attacker, defender, damage = combat.execute_turn()
-                print(f"{attacker} ataca a {defender} y le hace {damage} de daño")
+                attacker, defender, result = combat.execute_turn()
+                print(f"{attacker} ataca a {defender} y hace {result.base_damage} de daño")
+                if result.reacted:
+                    print(f"{defender} se defiende y el daño baja a {result.damage_after_reaction}")
+                absorbed = result.damage_after_reaction - result.final_damage
+                print(f"La durabilidad de {defender} absorbe {absorbed}")
+                print(f"Daño final: {result.final_damage}")
             elif action == "2":
                 combat.surrender()
             else:

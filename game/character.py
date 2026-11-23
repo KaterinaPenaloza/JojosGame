@@ -1,11 +1,19 @@
 from enum import Enum
 from random import randint
 from game.stand import *
+from dataclasses import dataclass
 
 
 class Team(Enum):
     BUCCIARATI = "Team Bucciarati"
     LA_SQUADRA = "La Squadra Esecuzioni"
+
+@dataclass
+class AttackResult:
+    base_damage: int
+    reacted: bool
+    damage_after_reaction: int
+    final_damage: int
 
 class Character:
     def __init__(self, name, team, stand):
@@ -47,16 +55,20 @@ class Character:
         y multiplicado por la proporcion de la vida que le quede
         mientras más debil menos daño hace, pero sin bajar de la mitad del daño que tiene"""
         life_prop = self.life / self.max_life
-        base_damage = round((self.stand.power + randint(0, 3)) * (0.5 + 0.5 * life_prop))
+        base_damage = round((self.stand.power + randint(0, 5))*2 * (0.5 + 0.5 * life_prop))
         return base_damage
 
     def attack(self, rival):
-        damage = self.damage()
-        damage -= rival.stand.durability
-        if damage < 1:
-            damage = 1
-        rival.take_damage(damage)
-        return damage
+        base_damage = self.damage()
+        reacted = rival.defends()
+        after_reaction = round(base_damage * 0.7) if reacted else base_damage
+        final_damage = max(1, after_reaction - rival.stand.durability)
+        rival.take_damage(final_damage)
+        return AttackResult(base_damage, reacted, after_reaction, final_damage)
+
+    def defends(self):
+        chance = self.stand.speed * 10
+        return randint(1, 100) <= chance
 
     @classmethod
     def create_characters(cls):

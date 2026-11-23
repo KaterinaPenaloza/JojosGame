@@ -12,9 +12,9 @@ class Combat:
 
     def execute_turn(self):
         attacker, defender = self.attacker.name, self.defender.name
-        damage = self.attacker.attack(self.defender)
+        result = self.attacker.attack(self.defender)
         self.attacker, self.defender = self.defender, self.attacker
-        return attacker, defender, damage
+        return attacker, defender, result
 
     def surrender(self):
         self.surrendered = self.attacker
